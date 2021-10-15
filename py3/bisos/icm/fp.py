@@ -105,6 +105,7 @@ G = icm.IcmGlobalContext()
 # G.icmCmndsLibsAppend = __file__
 ####+END:
 
+from bisos.basics import pattern
 
 ####+BEGIN: bx:dblock:python:section :title "Class Definitions"
 """
@@ -265,13 +266,11 @@ def commonParamsSpecify(
         argparseLongOpt='--fpBase',
     )
 
-
 ####+BEGIN: bx:dblock:python:section :title "Common Examples Sections"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Examples Sections*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
 ####+END:
-
 
 ####+BEGIN: bx:dblock:python:func :funcName "examples_fpBase" :comment "Show/Verify/Update For relevant PBDs" :funcType "examples" :retType "none" :deco "" :argsList "fpBase cls menuLevel='chapter'"
 """
@@ -359,13 +358,15 @@ class fpParamsList(icm.Cmnd):
         if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
             return cmndOutcome
 ####+END:
+        # global fpBaseInst; fpBaseInst = typing.cast(getattr(__main__, cls), None)
         # exec(
         #     "fpBaseInst = __main__.{cls}('{fpBase}',)".format(cls=cls, fpBase=fpBase,),
         #     globals(),
         # )
+        # fps_namesWithAbsPath = fpBaseInst.fps_namesWithAbsPath()
 
-        fpBaseInst = getattr(__main__, cls)(fpBase)
-        fps_namesWithAbsPath = fpBaseInst.fps_namesWithAbsPath()      # type: ignore
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
+        fps_namesWithAbsPath = fpBaseInst.fps_namesWithAbsPath()
 
         if interactive:
             formatTypes = self.cmndArgsGet("0&2", cmndArgsSpecDict, effectiveArgsList)
@@ -451,7 +452,7 @@ class fpParamsSet(icm.Cmnd):
         cls = callParamsDict['cls']
 
 ####+END:
-        fpBaseInst = getattr(__main__, cls)(fpBase)
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
         fps_namesWithAbsPath = fpBaseInst.fps_namesWithAbsPath()  # type: ignore
 
         FP_writeWithIcmParams(fps_namesWithAbsPath,)
@@ -497,7 +498,7 @@ class fpParamsSetDefaults(icm.Cmnd):
         cls = callParamsDict['cls']
 
 ####+END:
-        fpBaseInst = getattr(__main__, cls)(fpBase)
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
         fps_namesWithAbsPath = fpBaseInst.fps_namesWithAbsPath()  # type: ignore
 
         FP_writeDefaultsWithIcmParams(fps_namesWithAbsPath,)
@@ -551,7 +552,7 @@ class fpParamsRead(icm.Cmnd):
         if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
             return cmndOutcome
 ####+END:
-        fpBaseInst = getattr(__main__, cls)(fpBase)
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
         fpBaseDir = fpBaseInst.fileTreeBaseGet()  # type: ignore
 
         if interactive:
@@ -617,7 +618,8 @@ class fpParamsRead(icm.Cmnd):
         cmndArgsSpecDict = icm.CmndArgsSpecDict()
         argChoices = ['all', ]
 
-        fpBaseInst = getattr(__main__, cls)(fpBase)
+
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
 
         for each in fpBaseInst.fps_namesWithRelPath():  # type: ignore
             argChoices.append(each)
