@@ -4,6 +4,7 @@
 """
 
 import typing
+from typing_extensions import ParamSpec
 
 icmInfo: typing.Dict[str, typing.Any] = { 'moduleDescription': ["""
 *       [[elisp:(org-show-subtree)][|=]]  [[elisp:(org-cycle)][| *Description:* | ]]
@@ -240,6 +241,37 @@ class FP_Base(icm.FILE_TreeObject):
         self.fps_dictParams = cmndOutcome.results
         return cmndOutcome
 
+####+BEGIN: bx:icm:py3:method :methodName "fps_setParam" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_setParam/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_setParam(
+####+END:
+            self,
+            paramName,
+            paramValue,
+    ):
+        """Returns a dict of FILE_Param s. Reads in all FPs at self.fps_absBasePath()."""
+        namesWithAbsPath = self.fps_namesWithAbsPath()
+        fpBase = namesWithAbsPath[paramName]
+        icm.FILE_ParamWriteTo(fpBase, paramName, paramValue)
+
+####+BEGIN: bx:icm:py3:method :methodName "fps_getParam" :deco "default"
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_getParam/ deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def fps_getParam(
+####+END:
+            self,
+            paramName,
+    ):
+        """Returns a dict of FILE_Param s. Reads in all FPs at self.fps_absBasePath()."""
+        namesWithAbsPath = self.fps_namesWithAbsPath()
+        fpBase = namesWithAbsPath[paramName]
+        paramValue = icm.FILE_ParamReadFrom(fpBase, paramName,)
+        return paramValue
 
 ####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
 """
@@ -298,8 +330,7 @@ def examples_fpBase(
     cps=cpsInit() ; cps['fpBase'] = fpBase ; cps['cls'] = cls
     menuItem(verbosity='little')
 
-    cmndArgs = "basic" ; menuItem(verbosity='little')
-    cmndArgs = "setExamples getExamples" ; menuItem(verbosity='little')
+    cmndArgs = "basic setExamples getExamples" ; menuItem(verbosity='little')
 
     cmndName = "fpParamsSetDefaults" ; cmndArgs = "" ;
     cps=cpsInit() ; cps['fpBase'] = fpBase ; cps['cls'] = cls
@@ -309,8 +340,7 @@ def examples_fpBase(
     cps=cpsInit() ; cps['fpBase'] = fpBase ; cps['cls'] = cls
     menuItem(verbosity='little')
 
-    cmndArgs = "basic" ; menuItem(verbosity='little')
-    cmndArgs = "setExamples getExamples" ; menuItem(verbosity='little')
+    cmndArgs = "basic setExamples getExamples" ; menuItem(verbosity='little')
 
 
 ####+BEGIN: bx:dblock:python:section :title "ICM Commands"
@@ -469,6 +499,174 @@ class fpParamsSet(icm.Cmnd):
         return """
 ***** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns the full path of the Sr baseDir.
 """
+
+
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "fpParamSetWithNameValue" :parsMand "fpBase cls" :parsOpt "" :argsMin "2" :argsMax "2" :asFunc "" :interactiveP ""
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /fpParamSetWithNameValue/ parsMand=fpBase cls parsOpt= argsMin=2 argsMax=2 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+"""
+class fpParamSetWithNameValue(icm.Cmnd):
+    cmndParamsMandatory = [ 'fpBase', 'cls', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 2, 'Max': 2,}
+
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+        interactive=False,        # Can also be called non-interactively
+        fpBase=None,         # or Cmnd-Input
+        cls=None,         # or Cmnd-Input
+        argsList=[],         # or Args-Input
+    ):
+        cmndOutcome = self.getOpOutcome()
+        if interactive:
+            if not self.cmndLineValidate(outcome=cmndOutcome):
+                return cmndOutcome
+            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
+        else:
+            effectiveArgsList = argsList
+
+        callParamsDict = {'fpBase': fpBase, 'cls': cls, }
+        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
+            return cmndOutcome
+        fpBase = callParamsDict['fpBase']
+        cls = callParamsDict['cls']
+
+        cmndArgsSpecDict = self.cmndArgsSpec()
+        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
+            return cmndOutcome
+####+END:
+        paramName = self.cmndArgsGet("0", cmndArgsSpecDict, effectiveArgsList)
+        paramValue = self.cmndArgsGet("1", cmndArgsSpecDict, effectiveArgsList)
+
+        print(f"{paramName} {paramValue}")
+
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
+
+        fpBaseInst.fps_setParam(paramName, paramValue)
+
+        return cmndOutcome
+
+
+####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0",
+            argName="paramName",
+            argDefault="OopsName",
+            argChoices=[],
+            argDescription="Action to be specified by rest"
+        )
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="1",
+            argName="paramValue",
+            argDefault="OopsValue",
+            argChoices=[],
+            argDescription="Action to be specified by rest"
+        )
+
+        return cmndArgsSpecDict
+
+
+####+BEGIN: bx:icm:python:method :methodName "cmndDocStr" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndDocStr/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndDocStr(self):
+####+END:
+        return """
+***** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns the full path of the Sr baseDir.
+"""
+
+
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "fpParamGetWithName" :parsMand "fpBase cls" :parsOpt "" :argsMin "1" :argsMax "1" :asFunc "" :interactiveP ""
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /fpParamGetWithName/ parsMand=fpBase cls parsOpt= argsMin=1 argsMax=1 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+"""
+class fpParamGetWithName(icm.Cmnd):
+    cmndParamsMandatory = [ 'fpBase', 'cls', ]
+    cmndParamsOptional = [ ]
+    cmndArgsLen = {'Min': 1, 'Max': 1,}
+
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+        interactive=False,        # Can also be called non-interactively
+        fpBase=None,         # or Cmnd-Input
+        cls=None,         # or Cmnd-Input
+        argsList=[],         # or Args-Input
+    ):
+        cmndOutcome = self.getOpOutcome()
+        if interactive:
+            if not self.cmndLineValidate(outcome=cmndOutcome):
+                return cmndOutcome
+            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
+        else:
+            effectiveArgsList = argsList
+
+        callParamsDict = {'fpBase': fpBase, 'cls': cls, }
+        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
+            return cmndOutcome
+        fpBase = callParamsDict['fpBase']
+        cls = callParamsDict['cls']
+
+        cmndArgsSpecDict = self.cmndArgsSpec()
+        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
+            return cmndOutcome
+####+END:
+        paramName = self.cmndArgsGet("0", cmndArgsSpecDict, effectiveArgsList)
+
+        fpBaseInst = pattern.sameInstance(getattr(__main__, cls), fpBase)
+
+        paramValue = fpBaseInst.fps_getParam(paramName,)
+
+        print(f"{paramValue.parValueGet()}")
+
+        return cmndOutcome
+
+
+####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self):
+####+END:
+        """
+***** Cmnd Args Specification
+"""
+        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict.argsDictAdd(
+            argPosition="0",
+            argName="paramName",
+            argDefault="OopsName",
+            argChoices=[],
+            argDescription="Action to be specified by rest"
+        )
+
+        return cmndArgsSpecDict
+
+
+####+BEGIN: bx:icm:python:method :methodName "cmndDocStr" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
+    """
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndDocStr/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
+"""
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndDocStr(self):
+####+END:
+        return """
+***** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Returns the full path of the Sr baseDir.
+"""
+
+
 
 
 ####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "fpParamsSetDefaults" :parsMand "fpBase cls" :parsOpt "" :argsMin "0" :argsMax "0" :asFunc "" :interactiveP ""

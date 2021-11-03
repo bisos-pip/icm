@@ -32,11 +32,11 @@ icmInfo['moduleStatus'] = """
 *  [[elisp:(org-cycle)][| *ICM-INFO:* |]] :: Author, Copyleft and Version Information
 """
 ####+BEGIN: bx:icm:py:name :style "fileName"
-icmInfo['moduleName'] = "fpath"
+icmInfo['moduleName'] = "shRun"
 ####+END:
 
 ####+BEGIN: bx:icm:py:version-timestamp :style "date"
-icmInfo['version'] = "202110154735"
+icmInfo['version'] = "202110240036"
 ####+END:
 
 ####+BEGIN: bx:icm:py:status :status "Production"
@@ -61,7 +61,7 @@ icmInfo['cmndParts'] = "IcmCmndParts[common] IcmCmndParts[param]"
 
 ####+BEGIN: bx:icm:python:top-of-file :partof "bystar" :copyleft "halaal+minimal"
 """
-*  This file:/bisos/git/auth/bxRepos/bisos-pip/icm/py3/bisos/icm/fpath.py :: [[elisp:(org-cycle)][| ]]
+*  This file:/bisos/git/auth/bxRepos/bisos-pip/icm/py3/bisos/icm/shRun.py :: [[elisp:(org-cycle)][| ]]
  is part of The Libre-Halaal ByStar Digital Ecosystem. http://www.by-star.net
  *CopyLeft*  This Software is a Libre-Halaal Poly-Existential. See http://www.freeprotocols.org
  A Python Interactively Command Module (PyICM).
@@ -97,7 +97,10 @@ icmInfo['cmndParts'] = "IcmCmndParts[common] IcmCmndParts[param]"
 #
 #import traceback
 
-import pathlib
+# import pathlib
+
+from invoke import run
+
 
 ####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmG.py"
 from unisos import ucf
@@ -111,34 +114,111 @@ G = icm.IcmGlobalContext()
 ####+END:
 
 
+####+BEGIN: bx:icm:py3:func :funcName "bash" :funcType "" :retType "" :deco "default" :argsList "" :comment "Runs As Root"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /bash/ =Runs As Root= deco=default  [[elisp:(org-cycle)][| ]]
+"""
+@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+def bash(
+####+END:
+    command,
+    **kwargs
+):
+####+END:
+    """Based on verbosity level, add appropriate kwargs.
+
+Based on --verbosity set hide=False
+Based on --callTracking set echo=True
+"""
+
+    #icm.TM_here("Args: {}".format(args))
+    for key in kwargs:
+        icm.TM_here("keyword arg: %s: %s" % (key, kwargs[key]))
+
+    specifiedArg_hide = kwargs.pop('hide', None)
+    specifiedArg_echo = kwargs.pop('echo', None)
+    # specifiedArg_warn = kwargs.pop('warn', None)
+
+    verbosityLevel = icm.icmRunArgs_verbosityLevel()
+
+    if specifiedArg_hide is not None:
+        kwargs['hide'] = specifiedArg_hide
+    else:
+        if verbosityLevel >= 30:
+            #kwargs['hide'] = True    # True is different from 'both' in that it overrides echo=True
+            kwargs['hide'] = 'both'
+        else:
+            kwargs['hide'] = False
+
+    if specifiedArg_echo is not None:
+        kwargs['echo'] = specifiedArg_echo
+    else:
+        if icm.icmRunArgs_isCallTrackingMonitorOn():
+            kwargs['echo'] = True
+        else:
+            kwargs['echo'] = False
+
+
+    #result = run(command, hide=True, warn=True, echo=True)
+    #print(kwargs)
+
+    result = run(command, **kwargs)
+    return result
+
+
 ####+BEGIN: bx:dblock:python:section :title "Basic Functions"
 """
-*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Start Your Sections Here*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
+*  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Basic Functions*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
 """
 ####+END:
 
-####+BEGIN: bx:icm:py3:func :funcName "symlinkUpdate" :funcType "anyOrNone" :retType "bool" :deco "default" :argsList "srcPath targetPath"
+####+BEGIN: bx:icm:py3:func :funcName "cmnds" :funcType "" :retType "" :deco "" :argsList "" :comment "Runs As Root"
 """
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-anyOrNone :: /symlinkUpdate/ deco=default  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /cmnds/ =Runs As Root=  [[elisp:(org-cycle)][| ]]
 """
-@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-def symlinkUpdate(
+def cmnds(
 ####+END:
-    srcPath: pathlib.Path,
-    targetPath: pathlib.Path,
-) -> pathlib.Path:
+        cmnd,
+        **kwArgs,
+):
+    """
+** Adds a sudo to cmnd
+    """
+    retVal =  icm.subProc_bash(cmnd, **kwArgs)
+    return retVal
+
+
+####+BEGIN: bx:icm:py3:func :funcName "sudoCmnds" :funcType "" :retType "" :deco "" :argsList "" :comment "Runs As Root"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /sudoCmnds/ =Runs As Root=  [[elisp:(org-cycle)][| ]]
+"""
+def sudoCmnds(
 ####+END:
+        cmnd,
+        **kwArgs,
+):
     """
-** srcPath should exist, targetPath (gets created)
-*** TODO In due course, should also accept args as path strings. Just like pathlib.
+** Adds a sudo to cmnd
     """
-    if not srcPath.exists():
-        icm.EH_problem_usageError(f"Missing srcPath={srcPath}")
-        return typing.cast(pathlib.Path, None)
-    if targetPath.exists():
-        targetPath.unlink()
-    targetPath.symlink_to(srcPath)
-    return targetPath
+    sudoedCmnd = """sudo -- sh -c '{cmnd}'""".format(cmnd=cmnd)
+    retVal =  icm.subProc_bash(sudoedCmnd, **kwArgs)
+    return retVal
+
+####+BEGIN: bx:icm:py3:func :funcName "sudoOut" :funcType "" :retType "" :deco "" :argsList "" :comment "Runs As Root"
+"""
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /sudoOut/ =Runs As Root=  [[elisp:(org-cycle)][| ]]
+"""
+def sudoOut(
+####+END:
+        cmnd,
+        **kwArgs,
+):
+    """
+** Adds a sudo to
+    """
+    sudoedCmnd = """sudo -- sh -c '{cmnd}'""".format(cmnd=cmnd)
+    return icm.subProc_bashOut(sudoedCmnd, **kwArgs)
+
 
 
 ####+BEGIN: bx:icm:python:section :title "End Of Editable Text"
