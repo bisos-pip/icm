@@ -19,11 +19,14 @@ def longDescription():
 
 
 # __version__ = get_version('unisos/icm/__init__.py')
-__version__ = '0.2'
+__version__ = '0.3'
 
 
 requires = [
     'unisos.icm',
+    'blee.icmPlayer',
+    'invoke',
+    'typing_extensions',
 ]
 
 

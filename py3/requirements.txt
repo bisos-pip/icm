@@ -1,0 +1,7 @@
+blee==0.3
+blee.icmPlayer==0.5
+invoke==1.6.0
+setuptools==58.5.1
+typing_extensions==3.10.0.2
+unisos==0.2
+unisos.icm==0.24
