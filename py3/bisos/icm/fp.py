@@ -95,6 +95,9 @@ import collections
 
 import __main__
 
+from deprecated import deprecated
+
+
 ####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmG.py"
 from unisos import ucf
 from unisos import icm
@@ -124,11 +127,11 @@ class FP_Base(icm.FILE_TreeObject):
     """ FP_Base is also a FILE_TreeObject.
     """
 
-####+BEGIN: bx:icm:py3:method :methodName "__init__" :deco "default"
+####+BEGIN: bx:icm:py3:method :methodName "__init__" :deco "deprecated(\"moved to bpf\")"
     """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /__init__/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /__init__/ deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @deprecated("moved to bpf")
     def __init__(
 ####+END:
             self,
@@ -218,11 +221,11 @@ class FP_Base(icm.FILE_TreeObject):
             namesWithAbsPath[eachName] = os.path.join(self.fileTreeBaseGet(), eachRelPath)
         return namesWithAbsPath
 
-####+BEGIN: bx:icm:py3:method :methodName "fps_readTree" :deco "default"
+####+BEGIN: bx:icm:py3:method :methodName "fps_readTree" :deco "deprecated(\"moved to bpf\")"
     """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_readTree/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-    :: /fps_readTree/ deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+    @deprecated("moved to bpf")
     def fps_readTree(
 ####+END:
             self,

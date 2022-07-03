@@ -101,6 +101,7 @@ icmInfo['cmndParts'] = "IcmCmndParts[common] IcmCmndParts[param]"
 
 from invoke import run
 
+from deprecated import deprecated
 
 ####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmG.py"
 from unisos import ucf
@@ -114,11 +115,11 @@ G = icm.IcmGlobalContext()
 ####+END:
 
 
-####+BEGIN: bx:icm:py3:func :funcName "bash" :funcType "" :retType "" :deco "default" :argsList "" :comment "Runs As Root"
-"""
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /bash/ =Runs As Root= deco=default  [[elisp:(org-cycle)][| ]]
-"""
-@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+####+BEGIN: bx:icm:py3:func :funcName "bash" :funcType "" :retType "" :deco "deprecated(\"moved to bpf\")" :argsList "" :comment "Runs As Root"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /bash/ =Runs As Root= deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@deprecated("moved to bpf")
 def bash(
 ####+END:
     command,
@@ -172,10 +173,11 @@ Based on --callTracking set echo=True
 """
 ####+END:
 
-####+BEGIN: bx:icm:py3:func :funcName "cmnds" :funcType "" :retType "" :deco "" :argsList "" :comment "Runs As Root"
-"""
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /cmnds/ =Runs As Root=  [[elisp:(org-cycle)][| ]]
-"""
+####+BEGIN: bx:icm:py3:func :funcName "cmnds" :funcType "" :retType "" :deco "deprecated(\"moved to bpf\")" :argsList "" :comment "Runs As Root"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /cmnds/ =Runs As Root= deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@deprecated("moved to bpf")
 def cmnds(
 ####+END:
         cmnd,
@@ -188,10 +190,11 @@ def cmnds(
     return retVal
 
 
-####+BEGIN: bx:icm:py3:func :funcName "sudoCmnds" :funcType "" :retType "" :deco "" :argsList "" :comment "Runs As Root"
-"""
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /sudoCmnds/ =Runs As Root=  [[elisp:(org-cycle)][| ]]
-"""
+####+BEGIN: bx:icm:py3:func :funcName "sudoCmnds" :funcType "" :retType "" :deco "deprecated(\"moved to bpf\")" :argsList "" :comment "Runs As Root"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /sudoCmnds/ =Runs As Root= deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@deprecated("moved to bpf")
 def sudoCmnds(
 ####+END:
         cmnd,
@@ -204,10 +207,11 @@ def sudoCmnds(
     retVal =  icm.subProc_bash(sudoedCmnd, **kwArgs)
     return retVal
 
-####+BEGIN: bx:icm:py3:func :funcName "sudoOut" :funcType "" :retType "" :deco "" :argsList "" :comment "Runs As Root"
-"""
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /sudoOut/ =Runs As Root=  [[elisp:(org-cycle)][| ]]
-"""
+####+BEGIN: bx:icm:py3:func :funcName "sudoOut" :funcType "" :retType "" :deco "deprecated(\"moved to bpf\")" :argsList "" :comment "Runs As Root"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-      :: /sudoOut/ =Runs As Root= deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@deprecated("moved to bpf")
 def sudoOut(
 ####+END:
         cmnd,

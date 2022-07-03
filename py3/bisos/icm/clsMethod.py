@@ -174,39 +174,41 @@ def examples_clsMethod(
 ####+END:
 
 
-####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "clsMethodInv" :comment "" :parsMand "cls method" :parsOpt "" :argsMin "0" :argsMax "999" :asFunc "" :interactiveP ""
-"""
+####+BEGINNOT: bx:icm:python:cmnd:classHead :cmndName "clsMethodInv" :comment "" :parsMand "cls method" :parsOpt "" :argsMin "0" :argsMax "999" :deco "deprecated(\"moved to bpf\")" :asFunc "" :interactiveP ""
+""" #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  ICM-Cmnd   :: /clsMethodInv/ parsMand=cls method parsOpt= argsMin=0 argsMax=999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
-"""
+#+end_org """
 class clsMethodInv(icm.Cmnd):
     cmndParamsMandatory = [ 'cls', 'method', ]
     cmndParamsOptional = [ ]
     cmndArgsLen = {'Min': 0, 'Max': 999,}
 
+    @deprecated("moved to bpf")
     @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
         interactive=False,        # Can also be called non-interactively
         cls=None,         # or Cmnd-Input
         method=None,         # or Cmnd-Input
         argsList=[],         # or Args-Input
-    ):
+    ) -> icm.OpOutcome:
         cmndOutcome = self.getOpOutcome()
-        if interactive:
-            if not self.cmndLineValidate(outcome=cmndOutcome):
+        if not self.obtainDocStr:
+            if interactive:
+                if not self.cmndLineValidate(outcome=cmndOutcome):
+                    return cmndOutcome
+                effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
+            else:
+                effectiveArgsList = argsList
+
+            callParamsDict = {'cls': cls, 'method': method, }
+            if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
                 return cmndOutcome
-            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
-        else:
-            effectiveArgsList = argsList
+            cls = callParamsDict['cls']
+            method = callParamsDict['method']
 
-        callParamsDict = {'cls': cls, 'method': method, }
-        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
-            return cmndOutcome
-        cls = callParamsDict['cls']
-        method = callParamsDict['method']
-
-        cmndArgsSpecDict = self.cmndArgsSpec()
-        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
-            return cmndOutcome
+            cmndArgsSpecDict = self.cmndArgsSpec()
+            if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
+                return cmndOutcome
 ####+END:
         cmnd = "thisCls = __main__.{cls}()".format(cls=cls)
         icm.TM_here(f"cmnd={cmnd}")

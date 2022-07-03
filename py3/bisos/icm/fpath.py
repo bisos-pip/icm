@@ -97,6 +97,8 @@ icmInfo['cmndParts'] = "IcmCmndParts[common] IcmCmndParts[param]"
 #
 #import traceback
 
+from deprecated import deprecated
+
 import pathlib
 
 ####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmG.py"
@@ -117,11 +119,11 @@ G = icm.IcmGlobalContext()
 """
 ####+END:
 
-####+BEGIN: bx:icm:py3:func :funcName "symlinkUpdate" :funcType "anyOrNone" :retType "bool" :deco "default" :argsList "srcPath targetPath"
-"""
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-anyOrNone :: /symlinkUpdate/ deco=default  [[elisp:(org-cycle)][| ]]
-"""
-@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+####+BEGIN: bx:icm:py3:func :funcName "symlinkUpdate" :funcType "anyOrNone" :retType "bool" :deco "deprecated(\"moved to bpf\")" :argsList "srcPath targetPath"
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-anyOrNone :: /symlinkUpdate/ deco=deprecated("moved to bpf")  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@deprecated("moved to bpf")
 def symlinkUpdate(
 ####+END:
     srcPath: pathlib.Path,
