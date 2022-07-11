@@ -104,6 +104,8 @@ G = icm.IcmGlobalContext()
 # G.icmCmndsLibsAppend = __file__
 ####+END:
 
+from deprecated import deprecated
+
 ####+BEGIN: bx:dblock:python:section :title "Common Parameters Specification"
 """
 *  [[elisp:(beginning-of-buffer)][Top]] ############## [[elisp:(blee:ppmm:org-mode-toggle)][Nat]] [[elisp:(delete-other-windows)][(1)]]    *Common Parameters Specification*  [[elisp:(org-cycle)][| ]]  [[elisp:(org-show-subtree)][|=]]
